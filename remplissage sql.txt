@@ -1,0 +1,22 @@
+
+Alimentation des esclaves de model
+INSERT INTO engine (engine) SELECT DISTINCT engine FROM planes1
+INSERT INTO type (type) SELECT DISTINCT type FROM planes1
+INSERT INTO manufacturer (manufacturer) SELECT DISTINCT manufacturer FROM planes1
+
+alimentation de model
+
+
+
+INSERT INTO model (model.model, model.id_type, model.id_manufacturer, model.id_engine, model.seats,model.speed,model.`engines`)
+SELECT (planes1.model,`type`.id_type, manufacturer.id_manufacturer, `engine`.id_engine, planes1.seats, planes1.speed, planes1.`engine`) 
+FROM planes1 INNER JOIN manufacturer ON planes1.manufacturer=manufacturer.manufacturer INNER JOIN `type` ON planes1.`type`=`type`.`type`INNER JOIN `engine` ON planes1.`engine`
+=`engine`.`engine`
+
+
+
+UPDATE model SET id_manufacturer =
+(SELECT DISTINCT id_manufacturer FROM manufacturer INNER JOIN planes1 ON model = planes1.model)
+
+UPDATE model SET id_manufacturer =
+(SELECT DISTINCT id_manufacturer FROM manufacturer INNER JOIN planes1 ON manufacturer.manufacturer = planes1.manufacturer WHERE manufacturer.manufacturer = planes1.manufacturer)
