@@ -83,7 +83,7 @@ print(type)
 #     mycursor.execute("insert into model (model,id_manufacturer,id_type,id_engine,seats,speed,engines) values (null,null,null,null,null,null,null)")
 #
 
-# miam miam pour plane
+# # miam miam pour plane
 # mycursor.execute("SELECT tailnum,model,year from planes1")
 # planes= mycursor.fetchall()
 # mycursor.execute("SELECT * from model")
@@ -99,21 +99,23 @@ print(type)
 # print("debut commit")
 # mydb.commit()
 # print("finit")
+
+
+
+# # manque des tailnums dans planes, on va les chercher dans fligts
+# mycursor.execute("SELECT DISTINCT(tailnum) FROM flights1 WHERE tailnum NOT IN (SELECT tailnum FROM planes1)")
+# tailnum=mycursor.fetchall()
+# mycursor.execute("Select id_model from model where model is null and engines is null ")
+# idModelNull=mycursor.fetchall()
+# for id in idModelNull:
+#     idnull=id[0]
 #
-
-
-# manque des tailnums dans planes, on va les chercher dans fligts
-mycursor.execute("SELECT DISTINCT(tailnum) FROM flights1 WHERE tailnum NOT IN (SELECT tailnum FROM planes1)")
-tailnum=mycursor.fetchall()
-mycursor.execute("Select id_model from model where model like null ")
-idModelNull=mycursor.fetchall()
-
-for t in tailnum:
-    val=[]
-    val = t[0],"NULL",idModelNull
-    print(val)
-    mycursor.execute("Insert into planes2 (tailnum, year, id_model) values (%s,%s,%s)",val)
-
+# for t in tailnum:
+#     val=[]
+#     val = t[0],"NULL",idnull
+#     print(val)
+#     mycursor.execute("Insert into planes2 (tailnum, year, id_model) values (%s,%s,%s)",val)
+#
 
 # table airlines2
 
@@ -189,7 +191,8 @@ for t in tailnum:
 
 
 
-mycursor2.execute("")
+mycursor2.execute("SELECT carrier,COUNT(distinct(dest)) FROM flights2 GROUP BY carrier")
+print(mycursor2.fetchall())
 
 
 print("debut commit")
