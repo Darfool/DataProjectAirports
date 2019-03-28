@@ -179,6 +179,8 @@ while i < nombre:
 
 
 
+mycursor2.execute("")
+
 
 print("debut commit")
 mydb.commit()

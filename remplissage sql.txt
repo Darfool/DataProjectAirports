@@ -20,3 +20,5 @@ UPDATE model SET id_manufacturer =
 
 UPDATE model SET id_manufacturer =
 (SELECT DISTINCT id_manufacturer FROM manufacturer INNER JOIN planes1 ON manufacturer.manufacturer = planes1.manufacturer WHERE manufacturer.manufacturer = planes1.manufacturer)
+
+dplython

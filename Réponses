@@ -1,0 +1,14 @@
+Data wrangling
+
+2)
+nombre d'aéroports:
+select count(distinct(FAA)) from airports2 where dst like "n"
+nombre de tz:
+select count(distinct(id_tz,dst)) from airports2 where dst like "n"
+nombre de destinations:
+select count(distinct(dest)) from flights2 inner join airports2 on dest = FAA where dst like "n"
+les avions qui ne passent pas a l'heure d'été ne sont pas pertinant, un avions pouvant passer d'un airports ayant un passage vers un ne l'ayant pas.
+
+3)
+Donne le nombre d'occurence des airports d'origine
+select count(origin) from flights2 order by desc
