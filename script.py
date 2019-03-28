@@ -46,22 +46,22 @@ mycursor2 = mydb.cursor(buffered=True)
 #
 # data to model
 #
-# mycursor.execute("SELECT distinct(model),manufacturer,engine,engines,speed,seats,type   from planes1")
-# planes= mycursor.fetchall()
-# mycursor.execute("SELECT * from engine")
-# engines= mycursor.fetchall()
-# mycursor.execute("SELECT * from manufacturer")
-# manufacturer= mycursor.fetchall()
-# mycursor.execute("SELECT * from type")
-# type= mycursor.fetchall()
-# print(type)
+mycursor.execute("SELECT distinct(model),manufacturer,engine,engines,speed,seats,type   from planes1")
+planes= mycursor.fetchall()
+mycursor.execute("SELECT * from engine")
+engines= mycursor.fetchall()
+mycursor.execute("SELECT * from manufacturer")
+manufacturer= mycursor.fetchall()
+mycursor.execute("SELECT * from type")
+type= mycursor.fetchall()
+print(type)
 #
 # id_eng=0
 # id_type=0
 # id_manuf=0
 
-# on aliente model
 
+#
 # for p in planes:
 #     print(p[2])
 #     for e in engines:
@@ -78,6 +78,10 @@ mycursor2 = mydb.cursor(buffered=True)
 #     val=p[0],id_manuf,id_type,id_eng,p[5],p[4],p[3]
 #     print(val)
 #     mycursor.execute("insert into model (model,id_manufacturer,id_type,id_engine,seats,speed,engines) values (%s,%s,%s,%s,%s,%s,%s)",val)
+#
+#     # resolution d'un problème: des avions qui n'aparaissent pas dans planes, on dois leur préparer un model vide.
+#     mycursor.execute("insert into model (model,id_manufacturer,id_type,id_engine,seats,speed,engines) values (null,null,null,null,null,null,null)")
+#
 
 # miam miam pour plane
 # mycursor.execute("SELECT tailnum,model,year from planes1")
@@ -89,21 +93,27 @@ mycursor2 = mydb.cursor(buffered=True)
 #     for m in model:
 #         if m[1] == p[1]:
 #             id_model=m[0]
-#     val=p[0],p[2],id_model
+#             val=p[0],p[2],id_model
+#     print(p[0],id_model)
 #     mycursor.execute("Insert into planes2 (tailnum, year, id_model) values (%s,%s,%s)",val)
+# print("debut commit")
+# mydb.commit()
+# print("finit")
 #
 
 
 # manque des tailnums dans planes, on va les chercher dans fligts
-# mycursor.execute("SELECT DISTINCT(tailnum) FROM flights1 WHERE tailnum NOT IN (SELECT tailnum FROM planes1)")
-# tailnum=mycursor.fetchall()
-#
-# for t in tailnum:
-#     val=[]
-#     val = t[0],"NULL","NULL"
-#     print(val)
-#     mycursor.execute("Insert into planes2 (tailnum, year, id_model) values (%s,%s,%s)",val)
-#
+mycursor.execute("SELECT DISTINCT(tailnum) FROM flights1 WHERE tailnum NOT IN (SELECT tailnum FROM planes1)")
+tailnum=mycursor.fetchall()
+mycursor.execute("Select id_model from model where model like null ")
+idModelNull=mycursor.fetchall()
+
+for t in tailnum:
+    val=[]
+    val = t[0],"NULL",idModelNull
+    print(val)
+    mycursor.execute("Insert into planes2 (tailnum, year, id_model) values (%s,%s,%s)",val)
+
 
 # table airlines2
 
@@ -154,26 +164,26 @@ mycursor2 = mydb.cursor(buffered=True)
 
 # script datetime
 
-
-mycursor2.execute("Select count(*) from flights2")
-nb = mycursor2.fetchall()
-mycursor2.execute("select * from flights2")
-for n in nb:
-    nombre=n[0]
-i=0
-while i < nombre:
-     i+=1
-     plane=mycursor2.next()
-     print(i)
-     print(plane)
-     timehour=datetime(year=plane[0],month=plane[1],day=plane[2],hour=plane[16],minute=plane[17])
-     # stringDate="datetime.datetime"+"("+str(plane[0])+","+str(plane[1])+","+str(plane[2])+","+str(plane[16])+","+str(plane[17])+")"
-     # timehour.strftime('%Y-%m-%d %H:%M:%S')
-     print(timehour)
-     # print(stringDate)
-
-     val=timehour,plane[0],plane[1],plane[2],plane[16],plane[10]
-     mycursor.execute("UPDATE flights2 set timehour = (%s) where flights2.year =(%s) and flights2.month=(%s) and flights2.day=(%s) and flights2.hour=(%s) and flights2.flight= (%s)", val)
+#
+# mycursor2.execute("Select count(*) from flights2")
+# nb = mycursor2.fetchall()
+# mycursor2.execute("select * from flights2")
+# for n in nb:
+#     nombre=n[0]
+# i=0
+# while i < nombre:
+#      i+=1
+#      plane=mycursor2.next()
+#      print(i)
+#      print(plane)
+#      timehour=datetime(year=plane[0],month=plane[1],day=plane[2],hour=plane[16],minute=plane[17])
+#      # stringDate="datetime.datetime"+"("+str(plane[0])+","+str(plane[1])+","+str(plane[2])+","+str(plane[16])+","+str(plane[17])+")"
+#      # timehour.strftime('%Y-%m-%d %H:%M:%S')
+#      print(timehour)
+#      # print(stringDate)
+#
+#      val=timehour,plane[0],plane[1],plane[2],plane[16],plane[10]
+#      mycursor.execute("UPDATE flights2 set timehour = (%s) where flights2.year =(%s) and flights2.month=(%s) and flights2.day=(%s) and flights2.hour=(%s) and flights2.flight= (%s)", val)
 
 
 

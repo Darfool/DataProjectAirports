@@ -11,4 +11,14 @@ les avions qui ne passent pas a l'heure d'été ne sont pas pertinant, un avions
 
 3)
 Donne le nombre d'occurence des airports d'origine
-select count(origin) from flights2 order by desc
+SELECT origin,count(origin) from flights2 GROUP BY origin ORDER BY COUNT(origin) desc
+les 10 destinations les plus prisées(il suffit de mettre un asc a la place du desc pour avoir les 10 moins prisées)
+select dest,count(dest) from flights2 group by dest order by count(dest) DESC LIMIT 10
+les 10 avions ayant le plus (ou le moins selon l'order by)
+select tailnum,count(tailnum) from flights2 group by tailnum order by count(tailnum) DESC LIMIT 10
+
+4)
+Donne le nombre de destinations par compagnie
+SELECT carrier,COUNT(distinct(dest)) FROM flights2 GROUP BY carrier
+donne le nombre de destination par compagnie et par origine
+SELECT carrier,origin,COUNT(distinct(dest)) FROM flights2 GROUP BY carrier,origin
